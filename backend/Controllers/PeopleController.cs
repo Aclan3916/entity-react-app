@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using ContactManagersApi.Data;
 using ContactManagersApi.Models;
+using Microsoft.AspNetCore.JsonPatch;
+using ContactManagersApi.interfaces;
+using ContactManagersApi.Services;
 
 namespace ContactManagersApi.Controllers;
 
@@ -8,63 +11,75 @@ namespace ContactManagersApi.Controllers;
 [Route("api/[controller]")]
 public class PeopleController : ControllerBase
 {
-    private readonly PersonDb _db;
+    //private readonly PersonDb _db;
 
-    public PeopleController(PersonDb db)
+    private readonly IContactService _contactService;
+
+    public PeopleController(IContactService contactService)
     {
-        _db = db;
+        _contactService = contactService;
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Person>> GetAll()
+    public async Task<IEnumerable<Person>> GetAll()
     {
-        return Ok(_db.People.ToList());
+        return await _contactService.GetAllPeople();
     }
 
     [HttpPost]
-    public ActionResult<Person> CreatePerson([FromBody] Person newPerson)
+    public async Task<ActionResult<Person>>CreatePerson(Person newPerson)
     {       
             //Accepts a JSON object from the request body
             //Saves it to the database
             //Returns a 201 Created response with the new person’s data
-        _db.People.Add(newPerson);
-        _db.SaveChanges();
+        var createdPerson = await _contactService.CreatePerson(newPerson);
 
-        return CreatedAtAction(nameof(GetAll), new { id = newPerson.Id }, newPerson);
+        return CreatedAtAction(nameof(GetAll), new { id = createdPerson.Id }, createdPerson);
     }
-
-    [HttpPut("{id}")]
-    public IActionResult UpdatePerson(int id, [FromBody] Person updatedPerson)
-    {
-        var person = _db.People.FirstOrDefault(p => p.Id == id);
-        if(person == null)
-            return NotFound();
-
-        person.Name = updatedPerson.Name;
-        person.Email = updatedPerson.Email;
-        person.Phone = updatedPerson.Phone;
-
-        _db.SaveChanges();
-
-        return NoContent(); //204 response
-    }
-
     [HttpDelete("{id}")]
-    public IActionResult DeletePerson(int id)
+    public async Task<IActionResult> DeletePerson(int id)
     {
-        var person = _db.People.FirstOrDefault(x => x.Id == id);
-
-        if (person == null)
+        var result = await _contactService.DeletePerson(id);
+        if (!result)
         {
             return NotFound();
         }
 
-        _db.People.Remove(person);
-        _db.SaveChanges();
-
         return NoContent();
     }
     
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdatePersonPut(int id, Person updatedPerson)
+    {
+        if (id != updatedPerson.Id)
+        {
+            return BadRequest();
+        }
+
+        var result = await _contactService.UpdatePersonPut(updatedPerson);
+        if(!result)
+            return NotFound();
+
+        return NoContent(); //204 response
+    }
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> UpdatePersonPatch(int id, [FromBody] JsonPatchDocument<Person> patchDoc)
+    {
+        if (patchDoc == null)
+            return BadRequest();
+
+        var result = await _contactService.UpdatePersonPatch(id, patchDoc);
+
+        return result switch
+        {
+            PatchResult.NotFound => NotFound(),
+            PatchResult.InvalidModel => BadRequest("Validation failed."),
+            PatchResult.Success => NoContent(),
+            _ => StatusCode(500)
+        };
+
+        return NoContent();
+    }
 }
 
 //register a route at /api/people

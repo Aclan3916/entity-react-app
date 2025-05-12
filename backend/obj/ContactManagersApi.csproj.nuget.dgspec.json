@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/audreyclanton/RiderProjects/ContactManagersApi/ContactManagersApi.csproj": {}
+    "/Users/audreyclanton/RiderProjects/contact-managers/backend/ContactManagersApi.csproj": {}
   },
   "projects": {
-    "/Users/audreyclanton/RiderProjects/ContactManagersApi/ContactManagersApi.csproj": {
+    "/Users/audreyclanton/RiderProjects/contact-managers/backend/ContactManagersApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/audreyclanton/RiderProjects/ContactManagersApi/ContactManagersApi.csproj",
+        "projectUniqueName": "/Users/audreyclanton/RiderProjects/contact-managers/backend/ContactManagersApi.csproj",
         "projectName": "ContactManagersApi",
-        "projectPath": "/Users/audreyclanton/RiderProjects/ContactManagersApi/ContactManagersApi.csproj",
+        "projectPath": "/Users/audreyclanton/RiderProjects/contact-managers/backend/ContactManagersApi.csproj",
         "packagesPath": "/Users/audreyclanton/.nuget/packages/",
-        "outputPath": "/Users/audreyclanton/RiderProjects/ContactManagersApi/obj/",
+        "outputPath": "/Users/audreyclanton/RiderProjects/contact-managers/backend/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/audreyclanton/.nuget/NuGet/NuGet.Config"
@@ -20,7 +20,6 @@
           "net7.0"
         ],
         "sources": {
-          "/usr/local/share/dotnet/sdk/7.0.308/Sdks/Microsoft.NET.Sdk.Web/library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -33,12 +32,22 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.200"
       },
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[7.0.11, )"
@@ -69,6 +78,20 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[7.0.20, 7.0.20]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.osx-x64",
+              "version": "[7.0.20, 7.0.20]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[7.0.20, 7.0.20]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -77,7 +100,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.308/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/Users/audreyclanton/.dotnet/sdk/9.0.200/RuntimeIdentifierGraph.json"
         }
       }
     }

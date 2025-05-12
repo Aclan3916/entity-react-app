@@ -1,5 +1,9 @@
 using ContactManagersApi.Data;
+using ContactManagersApi.interfaces;
 using Microsoft.EntityFrameworkCore;
+using ContactManagersApi.Services;
+using Microsoft.AspNetCore.JsonPatch;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,14 +23,15 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<PersonDb>(options => 
     options.UseSqlite(("Data Source = people.db")));
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IContactService, ContactService>();
 
 var app = builder.Build();
 
-app.UseCors("AllowLocalhost5173");
+app.UseCors("AllowLocalhost5173");                                            
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
