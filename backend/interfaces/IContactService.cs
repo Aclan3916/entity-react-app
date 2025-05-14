@@ -11,7 +11,8 @@ public interface IContactService
     Task<IEnumerable<Person>> GetAllPeople();
     Task<Person> GetPersonById(int id);
     Task<Person> CreatePerson(Person person);
+    Task<bool> DeletePerson(int id);
     Task<bool> UpdatePersonPut(Person updatedPerson);
     Task<PatchResult> UpdatePersonPatch(int id, JsonPatchDocument<Person> patchDoc);
-    Task<bool> DeletePerson(int id);
+  
 }

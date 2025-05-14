@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using ContactManagersApi.Data;
 using ContactManagersApi.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using ContactManagersApi.interfaces;
@@ -11,8 +10,6 @@ namespace ContactManagersApi.Controllers;
 [Route("api/[controller]")]
 public class PeopleController : ControllerBase
 {
-    //private readonly PersonDb _db;
-
     private readonly IContactService _contactService;
 
     public PeopleController(IContactService contactService)
@@ -29,9 +26,6 @@ public class PeopleController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Person>>CreatePerson(Person newPerson)
     {       
-            //Accepts a JSON object from the request body
-            //Saves it to the database
-            //Returns a 201 Created response with the new person’s data
         var createdPerson = await _contactService.CreatePerson(newPerson);
 
         return CreatedAtAction(nameof(GetAll), new { id = createdPerson.Id }, createdPerson);
